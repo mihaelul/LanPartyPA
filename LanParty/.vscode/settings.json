@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "string.h": "c",
+        "libraries.h": "c",
+        "stdlib.h": "c",
+        "libraries.c": "cpp",
+        "lanparty3.h": "c",
+        "tasks.h": "c"
+    }
+}

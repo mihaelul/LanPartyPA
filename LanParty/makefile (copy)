@@ -1,0 +1,4 @@
+build:
+	 gcc lanparty3.c ./exec/tasks.c -o lanParty
+clean:
+	 rm -f lanParty
