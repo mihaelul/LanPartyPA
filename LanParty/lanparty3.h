@@ -30,3 +30,10 @@ struct Q {
     Team *front, *rear;
 };
 typedef struct Q Queue;
+
+struct arbore {
+    EightTeam echipa;
+    struct arbore *left;
+    struct arbore *right;
+};
+typedef struct arbore BST;

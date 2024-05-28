@@ -28,6 +28,16 @@ void freeMemoryTask3(Queue* queue, Team* stack_win, Team* stack_lose);
 void task3(Team** teamlist, int* nrr, FILE* file, EightTeam** lasteight,
            int eight);
 
+
+/* --- */
+
+BST* newTeam(EightTeam data);
+BST* createBST();
+BST* insert(BST* team, EightTeam actual);
+void task4(FILE* outt, EightTeam* lasteightteams, BST* bst, EightTeam**);
+void afisareBST(FILE* out, BST* root, EightTeam**);
+void addAtBeginning(EightTeam** head, char* name, float points);
+
 // stiva
 int isEmpty(Team* top);
 void pop(Team** top);

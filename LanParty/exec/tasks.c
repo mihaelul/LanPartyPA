@@ -369,4 +369,55 @@ void task3(Team** teamlist, int* nrr, FILE* file, EightTeam** lasteight, int eig
     freeMemoryTask3(queue, stack_win, stack_lose);
 }
 
-//task 4
+//task4
+
+BST *newTeam(EightTeam data)
+{
+     BST *team=(BST *)malloc(sizeof(BST));
+     team->echipa=data;
+     team->left=team->right=NULL;
+     return team;
+}
+
+BST *insert(BST *team, EightTeam actual)
+{
+     if(team == NULL)
+        return newTeam(actual);
+
+     if(actual.puncte<team->echipa.puncte)
+        team->left=insert(team->left,actual);
+     else if(actual.puncte>team->echipa.puncte)
+         team->right=insert(team->right,actual);
+     else   
+         if(strcmp(actual.nume,team->echipa.nume) >0)
+            team->right=insert(team->right,actual);
+         else
+             team->left=insert(team->left,actual);
+
+      return team;                 
+
+}
+void afisareBST(FILE* out, BST *root, EightTeam ** newtop)
+{
+     if(root)
+     {
+          afisareBST(out,root->right,newtop);
+          fprintf(out,"%-34s-  %.2f\n", root->echipa.nume, root->echipa.puncte);
+			addAtBeginning(newtop, root->echipa.nume, root->echipa.puncte);
+          afisareBST(out,root->left,  newtop);
+
+     }
+}
+
+
+void task4(FILE* outt,EightTeam *lasteightteams, BST *bst, EightTeam ** newtop8)
+{    
+     EightTeam *current;
+     current=lasteightteams;
+     while(current!=NULL)
+     {
+          bst=insert(bst,*current);
+          current=current->Next;
+     }
+     afisareBST(outt,bst, newtop8);
+}

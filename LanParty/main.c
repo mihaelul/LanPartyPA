@@ -49,16 +49,26 @@ int main(int argc, char *argv[]) {
         }
         fprintf(file3, "%s", currentTeam->numele_echipei);
     }
-    
+
     EightTeam *top8 = NULL;
 
     if (cerinte[2]) task3(&TeamList, &nr_echipe, file3, &top8, lasteight);
+
+    EightTeam *newtop8 = NULL;
+    BST *bst = NULL;
+
+    BST *bstree = NULL;
+    if (cerinte[3]) {
+        task3(&TeamList, &nr_echipe, file3, &top8, lasteight);
+        fprintf(file3, "TOP 8 TEAMS:\n");
+        task4(file3, top8, bstree, &newtop8);
+    }
     
     
     fclose(file);
     fclose(file2);
     fclose(file3);
 
-     return 0;
+    return 0;
 
 }
