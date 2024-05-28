@@ -125,3 +125,52 @@ void adaugare(Team** teamlist, FILE* file2, int* nr)
           (*teamlist) = addTeam;
      }
 }
+ //task 2
+
+ float teamPoints(Team *teamlist, int nrOfPlayers)
+{
+    float suma = 0;
+    for(int i=0; i<nrOfPlayers; i++) {
+            suma = suma + teamlist->jucator[i].points;
+    }
+    return suma/nrOfPlayers;
+}
+int power(int nr)
+{
+    int i=1;
+    while(i<nr) {
+        i = i*2;
+    }
+    if(i == nr)
+        return i;
+    return i/2;
+}
+
+float minimPoints(Team *teamlist)
+{
+    float minim = teamlist->total;
+    while(teamlist != NULL) {
+        if(teamlist->total < minim)
+            minim = teamlist->total;
+        teamlist = teamlist->Next;
+    }
+    return minim;
+}
+void task2(Team **teamlist, int *nr)
+{
+    Team *current = *teamlist;
+    float minim;
+    int win;
+    for(int i=0; i<*nr; i++) {
+        current->total = teamPoints(current,current->nr_jucatori);  
+        current = current->Next;  
+    }
+    win = power(*nr);
+    if(win == *nr)
+        return;
+    while(*nr > win) {
+        minim = minimPoints(*teamlist);
+        delete(teamlist,minim);
+        *nr = *nr - 1;
+    }
+}

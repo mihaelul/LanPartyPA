@@ -39,10 +39,22 @@ int main(int argc, char *argv[]) {
         }
         fprintf(file3, "%s", currentTeam->numele_echipei);
     }
+
+    if (cerinte[1]) {
+        task2(&TeamList, &nr_echipe);
+        currentTeam = TeamList;
+        while (currentTeam->Next != NULL) {
+            fprintf(file3, "%s\r\n", currentTeam->numele_echipei);
+            currentTeam = currentTeam->Next;
+        }
+        fprintf(file3, "%s", currentTeam->numele_echipei);
+    }
+    
     
     fclose(file);
     fclose(file2);
     fclose(file3);
 
     return 0;
+
 }
