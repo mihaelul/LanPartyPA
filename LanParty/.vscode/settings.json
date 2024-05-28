@@ -5,6 +5,7 @@
         "stdlib.h": "c",
         "libraries.c": "cpp",
         "lanparty3.h": "c",
-        "tasks.h": "c"
+        "tasks.h": "c",
+        "player.h": "c"
     }
 }

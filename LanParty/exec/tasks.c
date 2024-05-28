@@ -255,16 +255,6 @@ void task2(Team **teamlist, int *nr)
 
 //task 3
 
-void copiere(char nume[], float punctaj, Team* v, int *index)
-{
-          strcpy(v[*index].numele_echipei,nume);
-          v[*index].total=punctaj;
-          (*index)++;
-          
-
-}
-
-
 void initializeQueueTask3(Queue* queue, Team* teamlist) {
     Team* current = teamlist;
     while (current != NULL) {
@@ -408,7 +398,14 @@ void afisareBST(FILE* out, BST *root, EightTeam ** newtop)
 
      }
 }
-
+void freeBST(BST* root) {
+    if (root == NULL) {
+        return;
+    }
+    freeBST(root->left);
+    freeBST(root->right);
+    free(root);
+}
 
 void task4(FILE* outt,EightTeam *lasteightteams, BST *bst, EightTeam ** newtop8)
 {    
@@ -420,6 +417,7 @@ void task4(FILE* outt,EightTeam *lasteightteams, BST *bst, EightTeam ** newtop8)
           current=current->Next;
      }
      afisareBST(outt,bst, newtop8);
+     freeBST(bst);
 }
 
 int height(AVL *node)
@@ -523,15 +521,13 @@ AVL* insertAVL(AVL* team, EightTeam *actual)
 	return team;
 }
 
-void afisarelevel2(AVL *root)
-{
-     if(root)
-     {
-          afisarelevel2(root->right);
-
-          if(root->height==2)
-            printf("Numele echipei %s cu punctele %.2f \n", root->echipa->nume, root->echipa->puncte);
-     }
+void freeAVL(AVL* root) {
+    if (root == NULL) {
+        return;
+    }
+    freeAVL(root->left);
+    freeAVL(root->right);
+    free(root);
 }
 
 void task5(EightTeam *eight, FILE*fisier)
@@ -548,4 +544,5 @@ void task5(EightTeam *eight, FILE*fisier)
 	fprintf(fisier, "%s\r\n", avl->right->left->echipa->nume);
 	fprintf(fisier, "%s\r\n", avl->left->right->echipa->nume);
 	fprintf(fisier, "%s\r\n", avl->left->left->echipa->nume);
+     freeAVL(avl);
 }
