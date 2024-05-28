@@ -63,6 +63,14 @@ int main(int argc, char *argv[]) {
         fprintf(file3, "TOP 8 TEAMS:\n");
         task4(file3, top8, bstree, &newtop8);
     }
+     if (cerinte[4]) {
+        EightTeam *new = NULL;
+        while (newtop8 != NULL) {
+            addAtBeginning(&new, newtop8->nume, newtop8->puncte);
+            newtop8 = newtop8->Next;
+        }
+        task5(new, file3);
+    }
     
     
     fclose(file);

@@ -421,3 +421,131 @@ void task4(FILE* outt,EightTeam *lasteightteams, BST *bst, EightTeam ** newtop8)
      }
      afisareBST(outt,bst, newtop8);
 }
+
+int height(AVL *node)
+{
+     if(node == NULL)
+        return 0;
+     return node->height;   
+}
+int maxx(int a, int b)
+{
+     if(a>b)
+        return a;
+     else
+       return b;   
+}
+AVL* newNode(EightTeam *actual)
+{
+     AVL* node=(AVL*)malloc(sizeof(AVL));
+     node->echipa=actual;
+     node->left=node->right=NULL;
+     node->height=1;
+     return(node);
+}
+
+AVL *rightRotate(AVL *team)
+{
+    AVL* x=team->left;
+    AVL* T2=x->right;
+
+     x->right=team;
+     team->left=T2;
+
+     team->height= maxx(height(team->left),height(team->right))+1;
+     x->height=maxx(height(x->left),height(x->right))+1;
+
+     return x;  
+}
+
+AVL* leftRotate(AVL* team)
+{
+     AVL* y=team->right;
+     AVL *T2=y->left;
+
+     y->left=team;
+     team->right=T2;
+
+     y->left=team;
+     team->right = T2;
+
+     team->height=maxx(height(team->left),height(team->right))+1;
+     y->height=maxx(height(y->left),height(y->right))+1;
+
+     return y;
+}
+
+int balance(AVL* N)
+{
+     if(N==NULL)
+       return 0;
+      return (height(N->left)-height(N->right)); 
+}
+
+AVL* insertAVL(AVL* team, EightTeam *actual)
+{
+     if(team==NULL)
+        return(newNode(actual));
+
+    if(actual->puncte<team->echipa->puncte)
+        team->left=insertAVL(team->left,actual);
+     else if(actual->puncte>team->echipa->puncte)
+         team->right=insertAVL(team->right,actual);
+     else  {
+         if(strcmp(actual->nume,team->echipa->nume) >0)
+            team->right=insertAVL(team->right,actual);
+         else
+             team->left=insertAVL(team->left,actual);
+	}
+
+	 team->height=1+maxx(height(team->left),height(team->right));
+
+      int echilibru=balance(team);
+
+      if(echilibru>1 && actual->puncte<= team->left->echipa->puncte)
+           return rightRotate(team);
+
+
+     if(echilibru<-1 && actual->puncte>team->right->echipa->puncte)
+         return leftRotate(team);
+
+     if(echilibru > 1 && actual->puncte>team->left->echipa->puncte )
+     {  team->left=leftRotate(team->left);
+        return rightRotate(team);
+        }
+
+     if(echilibru<-1 && actual->puncte<team->right->echipa->puncte)
+     {
+          team->right=rightRotate(team->right);
+          return leftRotate(team);
+          return team;
+     } 
+	return team;
+}
+
+void afisarelevel2(AVL *root)
+{
+     if(root)
+     {
+          afisarelevel2(root->right);
+
+          if(root->height==2)
+            printf("Numele echipei %s cu punctele %.2f \n", root->echipa->nume, root->echipa->puncte);
+     }
+}
+
+void task5(EightTeam *eight, FILE*fisier)
+{	
+	AVL* avl=NULL;
+     while(eight!=NULL)
+     {
+          avl=insertAVL(avl,eight);
+          eight=eight->Next;
+     }
+
+	fprintf(fisier, "\r\nTHE LEVEL 2 TEAMS ARE:\r\n"); 
+	fprintf(fisier, "%s\r\n", avl->right->right->echipa->nume);
+	fprintf(fisier, "%s\r\n", avl->right->left->echipa->nume);
+	fprintf(fisier, "%s\r\n", avl->left->right->echipa->nume);
+	fprintf(fisier, "%s\r\n", avl->left->left->echipa->nume);
+}

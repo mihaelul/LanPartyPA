@@ -37,3 +37,11 @@ struct arbore {
     struct arbore *right;
 };
 typedef struct arbore BST;
+
+struct arbore2 {
+    EightTeam *echipa;
+    struct arbore2 *left;
+    struct arbore2 *right;
+    int height;
+};
+typedef struct arbore2 AVL;

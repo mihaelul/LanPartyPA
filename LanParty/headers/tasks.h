@@ -38,6 +38,18 @@ void task4(FILE* outt, EightTeam* lasteightteams, BST* bst, EightTeam**);
 void afisareBST(FILE* out, BST* root, EightTeam**);
 void addAtBeginning(EightTeam** head, char* name, float points);
 
+/* --- */
+
+int height(AVL* node);
+int maxx(int a, int b);
+AVL* newNode(EightTeam* actual);
+AVL* rightRotate(AVL* y);
+AVL* leftRotate(AVL* x);
+int balance(AVL* N);
+AVL* insertAVL(AVL* team, EightTeam* actual);
+void afisarelevel2(AVL* root);
+void task5(EightTeam* eight, FILE*);
+
 // stiva
 int isEmpty(Team* top);
 void pop(Team** top);
