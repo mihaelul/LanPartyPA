@@ -11,4 +11,33 @@ void adaugare(Team** teamlist, FILE* file2, int* nr);
 float teamPoints(Team* teamlist, int nrOfPlayers);
 int power(int nr);
 float minimPoints(Team* teamlist);
-void task2(Team** , int*);
+void task2(Team**, int*);
+
+/* --- */
+void copiere(char nume[], float punctaj, Team* v, int* index);
+void addAtBeginning(EightTeam** head, char* name, float points);
+void initializeQueueTask3(Queue* queue, Team* teamlist);
+void processMatchTask3(Queue* queue, Team** stack_win, Team** stack_lose,
+                       FILE* file);
+void updateTeamsQueueTask3(Queue* queue, Team** stack_win, Team** stack_lose,
+                           Team** teamlist, FILE* file, int* nrr, int eight,
+                           EightTeam** lasteight);
+void freeQueue(Queue* q);
+void freeTeams(Team* teamlist);
+void freeMemoryTask3(Queue* queue, Team* stack_win, Team* stack_lose);
+void task3(Team** teamlist, int* nrr, FILE* file, EightTeam** lasteight,
+           int eight);
+
+// stiva
+int isEmpty(Team* top);
+void pop(Team** top);
+void deleteStack(Team** top);
+void push(Team** top, int nr_juc, char echipa[], float tot);
+void freeStack(Team* top);
+
+// cozi
+Queue* createQueue();
+void enQueue(Queue* q, int nr_juc, char echipa[], float tot);
+void deQueue(Queue* q);
+int isEmpty2(Queue* q);
+void deleteQueue(Queue* q);

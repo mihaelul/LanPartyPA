@@ -19,3 +19,14 @@ struct myTEAM {
 };
 typedef struct myTEAM Team;
 
+struct eight {
+    char *nume;
+    float puncte;
+    struct eight *Next;
+};
+typedef struct eight EightTeam;
+
+struct Q {
+    Team *front, *rear;
+};
+typedef struct Q Queue;

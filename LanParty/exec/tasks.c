@@ -2,6 +2,84 @@
 #include <limits.h>
 #include<math.h>
 
+//stive
+void push(Team**top, int nr_juc, char echipa[], float tot) {
+	Team* newTeam=(Team*)malloc(sizeof(Team));
+	newTeam->nr_jucatori=nr_juc;
+    strcpy(newTeam->numele_echipei,echipa);
+	newTeam->total=tot;
+    newTeam->Next=*top;
+	*top=newTeam;
+}
+
+int isEmpty(Team*top){
+	return (top==NULL)?1:0;
+}
+
+
+
+void deleteStack(Team**top){
+	Team *temp;
+	while ((*top)!=NULL){ 
+		temp=*top;
+		*top=(*top)->Next;
+        free(temp->jucator);  
+		free(temp);
+	}
+}	
+
+void pop(Team** top) {
+    if (isEmpty(*top)) return;  
+    Team *temp = (*top);
+    *top = (*top)->Next; 
+}
+
+
+//cozi
+
+Queue* createQueue(){
+	Queue *q;
+	q=(Queue *)malloc(sizeof(Queue));
+	if (q==NULL) return NULL;	
+	q->front=q->rear=NULL;
+	return q;	
+}
+
+ void enQueue(Queue*q,  int nr_juc, char echipa[], float tot){
+	Team* newNode=(Team*)malloc(sizeof(Team));
+	newNode->nr_jucatori=nr_juc;
+	strcpy(newNode->numele_echipei,echipa);
+	newNode->total=tot;
+	newNode->Next=NULL;
+	if (q->rear==NULL) q->rear=newNode; 
+	else{
+		(q->rear)->Next=newNode;
+		(q->rear)=newNode;
+	}
+	if (q->front==NULL) q->front=q->rear; 
+}
+ 
+void deQueue(Queue*q) {  
+	
+	if(q->front == NULL) return ;
+	
+	q->front=q->front->Next;
+} 
+
+int isEmpty2(Queue*q){
+	return (q->front==NULL)?1:0;
+}
+
+void deleteQueue(Queue*q){
+	Team* aux;
+	while (!isEmpty2(q)){
+		aux=q->front;
+		q->front=q->front->Next;
+		free(aux);
+	}
+	free(q);
+}
+
 
 //liste
 
@@ -174,3 +252,121 @@ void task2(Team **teamlist, int *nr)
         *nr = *nr - 1;
     }
 }
+
+//task 3
+
+void copiere(char nume[], float punctaj, Team* v, int *index)
+{
+          strcpy(v[*index].numele_echipei,nume);
+          v[*index].total=punctaj;
+          (*index)++;
+          
+
+}
+
+
+void initializeQueueTask3(Queue* queue, Team* teamlist) {
+    Team* current = teamlist;
+    while (current != NULL) {
+        enQueue(queue, current->nr_jucatori, current->numele_echipei, current->total);
+        current = current->Next;
+    }
+}
+
+void processMatchTask3(Queue* queue, Team** stack_win, Team** stack_lose, FILE* file) {
+    Team *Team1, *Team2;
+    while (!isEmpty2(queue)) {
+        Team1 = queue->front;
+        deQueue(queue);
+        Team2 = queue->front;
+        deQueue(queue);
+
+        if (Team1->total > Team2->total) {
+            Team1->total += 1;
+            push(stack_win, Team1->nr_jucatori, Team1->numele_echipei, Team1->total);
+            push(stack_lose, Team2->nr_jucatori, Team2->numele_echipei, Team2->total);
+            fprintf(file, "%-33s-  %31s\r\n", Team1->numele_echipei, Team2->numele_echipei);
+        } else {
+            Team2->total += 1;
+            push(stack_win, Team2->nr_jucatori, Team2->numele_echipei, Team2->total);
+            push(stack_lose, Team1->nr_jucatori, Team1->numele_echipei, Team1->total);
+            fprintf(file, "%-33s-  %31s\r\n", Team1->numele_echipei, Team2->numele_echipei);
+        }
+    }
+}
+
+void addAtBeginning(EightTeam** head, char* name, float points)
+{ 
+     EightTeam* newTeam=(EightTeam*)malloc(sizeof(EightTeam));
+     newTeam->puncte=points;
+     newTeam->nume=(char*)malloc(100*sizeof(char));
+     strcpy(newTeam->nume,name);
+
+     newTeam->Next=*head;
+     *head=newTeam;
+
+}
+
+void updateTeamsQueueTask3(Queue* queue, Team** stack_win, Team** stack_lose, Team** teamlist, FILE* file, int* nrr, int eight, EightTeam** lasteight) {
+    while (*stack_lose != NULL) {
+        delete_name(teamlist, (*stack_lose)->numele_echipei);
+        pop(stack_lose);
+    }
+
+    (*nrr) /= 2;
+
+    while (*stack_win != NULL) {
+        enQueue(queue, (*stack_win)->nr_jucatori, (*stack_win)->numele_echipei, (*stack_win)->total);
+        if (*nrr == eight) {
+            addAtBeginning(lasteight, (*stack_win)->numele_echipei, (*stack_win)->total);
+        }
+        fprintf(file, "%-34s-  %.2f\r\n", (*stack_win)->numele_echipei, (*stack_win)->total);
+        pop(stack_win);
+    }
+}
+
+void freeQueue(Queue* q) {
+    while (!isEmpty2(q)) {
+        deQueue(q);
+    }
+    free(q);
+}
+void freeTeams(Team* teamlist) {
+    Team* current = teamlist;
+    Team* next;
+    while (current != NULL) {
+        next = current->Next;
+        free(current);
+        current = next;
+    }
+}
+void freeStack(Team* stack) {
+    while (stack != NULL) {
+        pop(&stack);
+    }
+}
+void freeMemoryTask3(Queue* queue, Team* stack_win, Team* stack_lose) {
+    freeQueue(queue);
+    freeStack(stack_win);
+    freeStack(stack_lose);
+}
+
+void task3(Team** teamlist, int* nrr, FILE* file, EightTeam** lasteight, int eight) {
+    Team *stack_win = NULL, *stack_lose = NULL;
+    Queue* queue = createQueue();
+
+    initializeQueueTask3(queue, *teamlist);
+    fprintf(file, "\r\n");
+
+    int nr_meci = 1;
+    while (*nrr != 1) {
+        fprintf(file, "\r\n--- ROUND NO:%d\r\n", nr_meci);
+        processMatchTask3(queue, &stack_win, &stack_lose, file);
+        fprintf(file, "\r\nWINNERS OF ROUND NO:%d\r\n", nr_meci);
+        updateTeamsQueueTask3(queue, &stack_win, &stack_lose, teamlist, file, nrr, eight, lasteight);
+        nr_meci++;
+    }
+    freeMemoryTask3(queue, stack_win, stack_lose);
+}
+
+//task 4
