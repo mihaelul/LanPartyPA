@@ -59,5 +59,5 @@ citind pe rand numele echipei, numele jucatorilor s.a.m.d. .
 
 ## **Probleme intampinate** <br>
 •La taskul3, numerotarea spatiilor pentru a afisa corect in fisier a fost o mica problema, ca trebuia sa fie exact ca in fisierul de rezultate.<br>
-•Endline-ul din Windows de forma "\r\n", care in Linux le citea fix "\r\n" si trebuia sa tai din string 2 caractere, pentru a nu salva endline-ul
+•Endline-ul din Windows de forma "\r\n", care in Linux le citea fix "\r\n" si trebuia sa tai din string 2 caractere, pentru a nu salva newline-ul
 
